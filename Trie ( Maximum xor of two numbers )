@@ -1,0 +1,77 @@
+//
+//  main.hpp
+//  HelloWorld
+//
+//  Created by Vipul Sharma on 2/17/18.
+//  Copyright © 2018 Vipul Sharma. All rights reserved.
+//  vipsharmavip@gmail.com [' . '] :)
+
+
+#include<iostream>
+#include<vector>
+#include<string>
+#include<cmath>
+#include<set>
+#include<map>
+#include<algorithm>
+#include<cstdio>
+#include<stack>
+#include<queue>
+#include<cstring>
+#define up 1
+#define right 2
+#define down 3
+#define left 4
+#define mod 1000000007
+#define ll long long
+
+using namespace std;
+
+const int Max = 10000001;
+int trie[2][Max];
+
+int query(int x){
+    int ans = 0;
+    int id = 0;
+    for(int i = 30 ; i >= 0 ; --i){
+        int pointer = 0;
+        if(1 << i & x) pointer = 1;
+        if(trie[1 - pointer][id]){
+            ans += 1 << i;
+            id = trie[1 - pointer][id];
+        } else
+            id = trie[pointer][id];
+     }
+    return ans;
+}
+
+int _next;
+
+void add(int x){
+    int id = 0;
+    for(int i = 30 ; i >= 0 ; --i){
+        int pointer = 0;
+        if(1 << i & x) pointer = 1;
+        if(!trie[pointer][id]){
+            trie[pointer][id] = ++_next;
+            id = _next;
+        } else
+            id = trie[pointer][id];
+    }
+}
+
+int main(){
+    cin.sync_with_stdio(false);
+    int n;
+    cin >> n;
+    int ans = 0;
+    for(int i = 1 ; i <= n;  ++i){
+        int x;
+        cin >> x;
+        add(x);
+        int r = query(x);
+        ans = max(ans, r);
+    }
+    cout << ans;
+    return 0;
+}
